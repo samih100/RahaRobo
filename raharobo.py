@@ -6,12 +6,16 @@ Kolikosta saa yhden rahan. Jos et saa kolikkoa kiinni menetät yhden rahan.
 Rosvoon törmääminen vie viisi rahaa.
 Rahat ja pelinopeus ovat kaikki itse säädettävissä luokan konstruktorissa.
 Liikkuminen tapahtuu nuolinäppäimillä. F2 aloittaa uuden pelin ja ESC lopettaa pelin.
+F10 tallentaa tilastot. F3 lataa tilastot.
 '''
 
 # alustukset
 import pygame
+import datetime
 from random import randint
 from random import shuffle
+from pymongo_query import hae_kaikki
+from pymongo_insert import tallenna_tilasto
 
 # luokat alkavat
 class RahaRobo():
@@ -26,6 +30,7 @@ class RahaRobo():
         self.aloitus_aika = None
         self.pelattu_aika = None
         self.edellinen_muutos = 0
+        self.pelipaiva = None
         # grafiikat
         self.fontti = pygame.font.SysFont("Arial", 20)
         self.kolikko = pygame.image.load("kolikko.png")
@@ -181,6 +186,16 @@ class RahaRobo():
                 if tapahtuma.key == pygame.K_F2:
                     self.uusi_peli()
 
+                if tapahtuma.key == pygame.K_F3:
+                    hae_kaikki()
+
+                if tapahtuma.key == pygame.K_F10:
+                    tallenna_tilasto(
+                        self.pelattu_aika, self.osuma_laskuri,
+                        self.nopeus_kerroin, self.pelipaiva
+                        )
+
+
             if tapahtuma.type == pygame.QUIT:
                 exit()
 
@@ -219,6 +234,7 @@ class RahaRobo():
             self.naytto.blit(teksti, (teksti_x, teksti_y))
             self.naytto.blit(aika_teksti, (teksti_x, teksti_y + 20))
             self.naytto.blit(aloita_uudestaan_teksti, (teksti_x, teksti_y + 40))
+            self.pelipaiva = datetime.datetime.now().isoformat()
             return True
         return False
     
