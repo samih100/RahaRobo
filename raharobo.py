@@ -10,14 +10,15 @@ F2 aloittaa uuden pelin. ESC lopettaa pelin.
 '''
 
 # alustukset
-from tkinter import Menu
 import pygame
-import pygame_menu
+import pygame_menu # pip install pygame-menu -U
 import datetime
 from random import randint
 from random import shuffle
-from pymongo_query import hae_kaikki
-from pymongo_insert import tallenna_tilasto
+import pymongo_query
+import pymongo_insert
+
+
 # luokat alkavat
 class RahaRobo():
     def __init__(self, nimi: str):
@@ -195,7 +196,7 @@ class RahaRobo():
                     self.uusi_peli()
 
                 if tapahtuma.key == pygame.K_F10:
-                    tallenna_tilasto(
+                    pymongo_insert.tallenna_tilasto(
                         self.nimi, self.pelattu_aika, self.osuma_laskuri,
                         self.nopeus_kerroin, self.pelipaiva
                         )
@@ -247,7 +248,7 @@ class RahaRobo():
             # tallennetaan tilasto MongoDB tietokantaan
             try:
                 if self.tallennus_tehty == False:
-                    tallenna_tilasto(
+                    pymongo_insert.tallenna_tilasto(
                                 self.nimi, self.pelattu_aika, self.osuma_laskuri,
                                 self.nopeus_kerroin, self.pelipaiva
                                 )
@@ -386,7 +387,7 @@ class AloitusValikko():
         Luo tilastosivun ja haetaan tietokannasta sisältö parametrien mukaan.
         '''
         # noudetaan kaikki tiedot MongoDB tietokannasta
-        datasetti = hae_kaikki(sarake, jarjestys)
+        datasetti = pymongo_query.hae_kaikki(sarake, jarjestys)
         
         # muuttuja label riveille
         datarivit = ''
@@ -410,7 +411,6 @@ class AloitusValikko():
                     align=pygame_menu.locals.ALIGN_LEFT, font_name=pygame.font.SysFont('Courier New', 14), label_id=datarivit)
                 AloitusValikko.labelID += 1
                 AloitusValikko.kaikki_datarivit[datarivit] = True
-
 
         # valikon käynnistyessä tullaan tänne
         if not paivitys:

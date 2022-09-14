@@ -3,12 +3,12 @@ MongoDB tietokantaan liittyvät tallennukset luodaan tänne
 '''
 
 import datetime
-from db import get_database
+import db
 
 def tallenna_tilasto(nimi: str, peliaika: float, rahaa: int, nopeuskerroin: float, pelipaiva: str) -> bool:
     # luo MongoDB yhteys ja tallenna muuttujina saadut tiedot tilastoksi
     try:
-        dbname = get_database()
+        dbname = db.get_database()
         collection_name = dbname["tilastot"]
 
         tilasto_1 = {

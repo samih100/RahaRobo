@@ -1,3 +1,4 @@
+build/
 output/
 env/
 venv/
@@ -16,3 +17,5 @@ temp/
 testrun/*
 .~lock*
 *.pkl
+pymongo_test.py
+setup.py

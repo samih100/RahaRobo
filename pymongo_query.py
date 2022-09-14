@@ -3,14 +3,14 @@ MongoDB tietokantaan liittyvät tietokantakyselyt luodaan tänne
 '''
 
 import datetime
-from db import get_database
+import db
 import pymongo
 
 # haetaan kaikki data ja järjestellään tieto
 # parametrien mukaan ja palautetaan data listana
 def hae_kaikki(sarake: str = 'peliaika', jarjestys: int = -1) -> list:
     try:
-        dbname = get_database()
+        dbname = db.get_database()
         collection_name = dbname["tilastot"]
         item_details = collection_name.find().sort(sarake,jarjestys)
         data = list(item_details)
