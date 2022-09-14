@@ -1,15 +1,18 @@
+'''
+MongoDB tietokantaan liittyvät tallennukset luodaan tänne
+'''
+
 import datetime
 from db import get_database
 
-def tallenna_tilasto(peliaika, rahaa, nopeuskerroin, pelipaiva):
-    # Hae robotti tietokanta ja lisää tilastotieto
+def tallenna_tilasto(nimi: str, peliaika: float, rahaa: int, nopeuskerroin: float, pelipaiva: str) -> bool:
+    # luo MongoDB yhteys ja tallenna muuttujina saadut tiedot tilastoksi
     try:
         dbname = get_database()
         collection_name = dbname["tilastot"]
 
-        # insert_many esimerkit
         tilasto_1 = {
-        "nimi" : "Pekka Pelaaja3",
+        "nimi" : nimi,
         "peliaika" : peliaika,
         "rahaa" : rahaa,
         "nopeuskerroin" : nopeuskerroin,
@@ -17,17 +20,8 @@ def tallenna_tilasto(peliaika, rahaa, nopeuskerroin, pelipaiva):
         }
         collection_name.insert_one(tilasto_1)
         print("Tallennus onnistui")
+
+    # tänne tarvitaan parempi virheenhallinta
     except:
         print("Virhe tilaston tallennuksessa")
-
-
-    # item_2 = {
-    # "_id" : "U1IT00002",
-    # "item_name" : "Egg",
-    # "category" : "food",
-    # "quantity" : 12,
-    # "price" : 36,
-    # "item_description" : "brown country eggs"
-    # }
-    #collection_name.insert_many([item_1,item_2])
 
